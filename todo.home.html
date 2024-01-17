@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+</head>
+<script>
+         function checkEnter(event) {
+        if (event.key === "Enter") {
+            addTask();
+            selectMostRecentTask();
+        }
+    }
+
+    function addTask() {
+    // Get the input value
+    var taskInput = document.getElementById("taskInput");
+    var inputValue = taskInput.value;
+
+    // Get the output element
+    var taskList = document.getElementById("taskList");
+
+    // Check if the input value is not empty
+    if (inputValue.trim() !== "") {
+        // Create a new list item to display the input value with a checkbox
+        var taskItem = document.createElement("li");
+        taskItem.innerHTML = `
+                <input type="checkbox" class="task-checkbox">
+                <span>${inputValue}</span>
+                <i class='bx bx-message-alt-x task-delete-icon'></i>
+            `;
+        
+            const deleteIcon = taskItem.querySelector(".task-delete-icon");
+            deleteIcon.addEventListener("click", function () {
+                taskList.removeChild(taskItem);
+            });
+
+        // Append the input value to the output field inside the same box
+        taskList.appendChild(taskItem);
+
+        // Clear the input field
+        taskInput.value = "";
+
+        // Add a click event listener to toggle the line-through text decoration
+        taskItem.querySelector("input[type=checkbox]").addEventListener("click", function () {
+            if (this.checked) {
+                taskItem.style.textDecoration = "line-through";
+            } else {
+                taskItem.style.textDecoration = "none";
+            }
+        });
+    }
+    }
+
+    function clearTasks() {
+        var taskList = document.getElementById("taskList");
+        taskList.innerHTML = ""; // Clears all the tasks in the list
+    }
+
+    document.addEventListener("keydown", function(event) {
+        // Check if Ctrl key is pressed and the Delete key is pressed
+        if (event.shiftKey && event.key === "Delete") {
+            clearTasks();
+        }
+    });
+
+    function selectMostRecentTask() {
+        var taskList = document.getElementById("taskList");
+        var tasks = taskList.getElementsByTagName("li");
+
+        if (tasks.length > 0) {
+            var mostRecentTask = tasks[tasks.length - 1];
+            mostRecentTask.scrollIntoView();
+        }
+    }
+</script>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        box-sizing: border-box;
+    }
+    body {
+        background-color: #007;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .box {
+        height: 600px;
+        width: 320px;
+        border-radius: 30px;
+        background-color: #007BFF;
+        box-shadow: 5px;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+    .logo {
+        font-size: 24px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        margin: 20px 60px;
+    }
+    .input-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .input  {
+        height: 30px;
+        width: 225px;
+        border: 2px solid grey;
+        border-radius: 30px;
+        font-size: 17px;
+        padding: 0px 10px;
+    }
+    .input:focus {
+        outline: none;
+    }
+    
+    .bx.bx-send {
+        color: #fff;
+        font-size: 28px;
+    }
+    .bx.bx-x-circle {
+        color: #fff;
+        font-size: 28px;
+    }
+    ul#taskList {
+        height: 400px;
+        margin: 20px 0px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 20px;
+        font-family: sans-serif;
+        color: black;
+        overflow-y: scroll;
+        word-wrap: break-word;
+    }
+    ul#taskList li {
+        margin: 10px 0px;
+        background-color: #00c9B7;
+        border-radius: 5px;
+        padding: 0px 10px;
+        width: 260px;
+    }
+    .check {
+        margin: 5px;
+    }
+    ul#taskList::-webkit-scrollbar {
+        width: 12px; 
+    }
+    
+    ul#taskList::-webkit-scrollbar-thumb {
+        background: blue; 
+        border-radius: 6px;
+    }
+
+    ul#taskList::-webkit-scrollbar-track {
+        background: transparent; 
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="box">
+            <label class="logo">To-Do List:</label>
+            <div class="input-container">
+                <input type="text" class="input" id="taskInput" placeholder="Enter your task" onkeypress="checkEnter(event)">
+                <i id="send" class='bx bx-send' onclick="addTask()"></i>
+                <i id="clear" class='bx bx-x-circle' onclick="clearTasks()"></i>
+            </div>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+</body>
+</html>
